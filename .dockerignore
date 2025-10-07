@@ -1,0 +1,29 @@
+# Git
+.git
+.gitignore
+
+# Documentation
+docs/
+*.md
+!BACKEND_README.md
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Build
+build/
+.gradle/
+target/
+
+# Logs
+logs/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test
+src/test/
