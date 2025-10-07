@@ -27,6 +27,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider tokenProvider;
     private final AuthenticationManager authenticationManager;
+    private final CategoryService categoryService;
 
     @Value("${jwt.expiration}")
     private long jwtExpirationMs;
@@ -47,6 +48,9 @@ public class AuthService {
 
         user = userRepository.save(user);
         log.info("User registered successfully with id: {}", user.getId());
+
+        // Create default categories for the new user
+        categoryService.createDefaultCategories(user);
 
         String token = generateTokenForUser(user);
 
