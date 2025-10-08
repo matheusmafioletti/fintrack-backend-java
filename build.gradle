@@ -34,9 +34,8 @@ dependencies {
     testImplementation 'com.h2database:h2'
     
     // Flyway for migrations
-    implementation 'org.flywaydb:flyway-core'
-    runtimeOnly 'org.flywaydb:flyway-database-postgresql'
-    
+    implementation 'org.flywaydb:flyway-core:9.22.3'
+
     // JWT
     implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.3'
@@ -64,4 +63,3 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
-

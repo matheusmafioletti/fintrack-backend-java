@@ -7,6 +7,7 @@ import com.fintrack.dto.response.UserResponse;
 import com.fintrack.exception.BadRequestException;
 import com.fintrack.model.User;
 import com.fintrack.repository.UserRepository;
+import com.fintrack.security.CustomUserDetailsService;
 import com.fintrack.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +30,7 @@ public class AuthService {
     private final JwtTokenProvider tokenProvider;
     private final AuthenticationManager authenticationManager;
     private final CategoryService categoryService;
+    private final CustomUserDetailsService userDetailsService;
 
     @Value("${jwt.expiration}")
     private long jwtExpirationMs;
@@ -83,10 +86,11 @@ public class AuthService {
     }
 
     private String generateTokenForUser(User user) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
         Authentication authentication = new UsernamePasswordAuthenticationToken(
-                user.getEmail(),
+                userDetails,
                 null,
-                org.springframework.security.core.authority.AuthorityUtils.createAuthorityList("ROLE_" + user.getRole().name())
+                userDetails.getAuthorities()
         );
         return tokenProvider.generateToken(authentication);
     }
@@ -102,4 +106,3 @@ public class AuthService {
                 .build();
     }
 }
-

@@ -140,14 +140,16 @@ public class CategoryService {
     }
 
     private void createDefaultCategory(User user, String name, TransactionType type, String color, String icon) {
-        Category category = Category.builder()
-                .user(user)
-                .name(name)
-                .type(type)
-                .color(color)
-                .icon(icon)
-                .build();
-        categoryRepository.save(category);
+        if (categoryRepository.findByUserIdAndName(user.getId(), name).isEmpty()) {
+            Category category = Category.builder()
+                    .user(user)
+                    .name(name)
+                    .type(type)
+                    .color(color)
+                    .icon(icon)
+                    .build();
+            categoryRepository.save(category);
+        }
     }
 
     private CategoryResponse mapToCategoryResponse(Category category) {
